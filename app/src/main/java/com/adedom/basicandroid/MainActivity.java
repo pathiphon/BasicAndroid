@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull MainHolder holder, int position) {
             Product product = items.get(position);
             holder.tvName.setText(product.getName());
-            holder.tvPrice.setText(product.getPrice() + "");
+            holder.tvPrice.setText(Utility.toPrice(product.getPrice()));
 
             Glide.with(getBaseContext())
                     .load(ConnectDB.BASE_IMAGE + product.getImage())

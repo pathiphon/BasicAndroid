@@ -115,9 +115,9 @@ public class ReportProductActivity extends AppCompatActivity implements OnAttach
         public void onBindViewHolder(@NonNull ReportHolder holder, int position) {
             Product product = items.get(position);
             holder.tvName.setText(product.getName());
-            holder.tvPrice.setText(product.getPrice() + "");
+            holder.tvPrice.setText(Utility.toPrice(product.getPrice()));
             holder.tvProductId.setText(product.getProductId());
-            holder.tvQty.setText(product.getQty() + "");
+            holder.tvQty.setText(Utility.toQty(product.getQty()));
 
             Glide.with(getBaseContext())
                     .load(ConnectDB.BASE_IMAGE + product.getImage())

@@ -6,14 +6,14 @@ import android.os.Parcelable;
 class Product implements Parcelable {
     private String productId;
     private String name;
-    private int price;
+    private double price;
     private int qty;
     private String image;
 
     public Product() {
     }
 
-    public Product(String productId, String name, int price, int qty, String image) {
+    public Product(String productId, String name, double price, int qty, String image) {
         this.productId = productId;
         this.name = name;
         this.price = price;
@@ -37,11 +37,11 @@ class Product implements Parcelable {
         this.name = name;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -70,7 +70,7 @@ class Product implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.productId);
         dest.writeString(this.name);
-        dest.writeInt(this.price);
+        dest.writeDouble(this.price);
         dest.writeInt(this.qty);
         dest.writeString(this.image);
     }
@@ -78,7 +78,7 @@ class Product implements Parcelable {
     protected Product(Parcel in) {
         this.productId = in.readString();
         this.name = in.readString();
-        this.price = in.readInt();
+        this.price = in.readDouble();
         this.qty = in.readInt();
         this.image = in.readString();
     }

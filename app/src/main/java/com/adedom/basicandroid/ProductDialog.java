@@ -36,7 +36,7 @@ public class ProductDialog extends DialogFragment {
         mTvPrice = (TextView) view.findViewById(R.id.tv_price);
 
         mTvName.setText(product.getName());
-        mTvPrice.setText(product.getPrice() + "");
+        mTvPrice.setText(Utility.toPrice(product.getPrice()));
 
         Glide.with(this)
                 .load(ConnectDB.BASE_IMAGE + product.getImage())
