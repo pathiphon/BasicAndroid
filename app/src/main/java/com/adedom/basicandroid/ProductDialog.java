@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
+import com.adedom.basicandroid.util.Utility;
 import com.bumptech.glide.Glide;
 
 public class ProductDialog extends DialogFragment {
