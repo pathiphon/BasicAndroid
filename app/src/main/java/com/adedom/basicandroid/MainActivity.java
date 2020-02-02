@@ -16,6 +16,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.adedom.basicandroid.models.Product;
 import com.adedom.basicandroid.util.Utility;
 import com.adedom.library.Dru;
 import com.adedom.library.ExecuteQuery;
@@ -27,7 +28,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<Product> items;
+    private ArrayList<Product> mItems;
     private RecyclerView mRecyclerView;
 
     @Override
@@ -61,16 +62,17 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(ResultSet resultSet) {
                         try {
-                            items = new ArrayList<Product>();
+                            mItems = new ArrayList<Product>();
                             while (resultSet.next()) {
                                 Product product = new Product(
                                         resultSet.getString("product_id"),
                                         resultSet.getString("name"),
                                         resultSet.getInt("price"),
                                         resultSet.getInt("qty"),
-                                        resultSet.getString("image")
+                                        resultSet.getString("image"),
+                                        resultSet.getString("ProductTypeID")
                                 );
-                                items.add(product);
+                                mItems.add(product);
                             }
 
                             mRecyclerView.setAdapter(new MainAdapters());
@@ -105,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull MainHolder holder, int position) {
-            Product product = items.get(position);
+            Product product = mItems.get(position);
             holder.tvName.setText(product.getName());
             holder.tvPrice.setText(Utility.toPrice(product.getPrice()));
 
@@ -117,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            return items.size();
+            return mItems.size();
         }
     }
 
@@ -136,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Product product = items.get(getAdapterPosition());
+                    Product product = mItems.get(getAdapterPosition());
 
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("product", product);

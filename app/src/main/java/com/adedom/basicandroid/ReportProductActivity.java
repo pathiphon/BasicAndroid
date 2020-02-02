@@ -14,6 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.adedom.basicandroid.models.Product;
 import com.adedom.basicandroid.util.Utility;
 import com.adedom.library.Dru;
 import com.adedom.library.ExecuteQuery;
@@ -26,7 +27,7 @@ import java.util.ArrayList;
 
 public class ReportProductActivity extends AppCompatActivity implements OnAttachListener {
 
-    private ArrayList<Product> items;
+    private ArrayList<Product> mItems;
     private FloatingActionButton mFloatingActionButton;
     private RecyclerView mRecyclerView;
 
@@ -71,16 +72,17 @@ public class ReportProductActivity extends AppCompatActivity implements OnAttach
                     @Override
                     public void onComplete(ResultSet resultSet) {
                         try {
-                            items = new ArrayList<Product>();
+                            mItems = new ArrayList<Product>();
                             while (resultSet.next()) {
                                 Product product = new Product(
                                         resultSet.getString("product_id"),
                                         resultSet.getString("name"),
                                         resultSet.getInt("price"),
                                         resultSet.getInt("qty"),
-                                        resultSet.getString("image")
+                                        resultSet.getString("image"),
+                                        resultSet.getString("ProductTypeID")
                                 );
-                                items.add(product);
+                                mItems.add(product);
                             }
 
                             mRecyclerView.setAdapter(new ReportAdapter());
@@ -114,7 +116,7 @@ public class ReportProductActivity extends AppCompatActivity implements OnAttach
 
         @Override
         public void onBindViewHolder(@NonNull ReportHolder holder, int position) {
-            Product product = items.get(position);
+            Product product = mItems.get(position);
             holder.tvName.setText(product.getName());
             holder.tvPrice.setText(Utility.toPrice(product.getPrice()));
             holder.tvProductId.setText(product.getProductId());
@@ -128,7 +130,7 @@ public class ReportProductActivity extends AppCompatActivity implements OnAttach
 
         @Override
         public int getItemCount() {
-            return items.size();
+            return mItems.size();
         }
     }
 

@@ -20,6 +20,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.adedom.basicandroid.models.Product;
 import com.adedom.basicandroid.util.Utility;
 import com.adedom.library.Dru;
 import com.adedom.library.ExecuteQuery;
@@ -35,7 +36,7 @@ public class ProductActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private FloatingActionButton mFloatingActionButton;
-    private ArrayList<Product> items;
+    private ArrayList<Product> mItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,16 +73,17 @@ public class ProductActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(ResultSet resultSet) {
                         try {
-                            items = new ArrayList<Product>();
+                            mItems = new ArrayList<Product>();
                             while (resultSet.next()) {
                                 Product product = new Product(
                                         resultSet.getString(1),
                                         resultSet.getString(2),
                                         resultSet.getInt(3),
                                         resultSet.getInt(4),
-                                        resultSet.getString(5)
+                                        resultSet.getString(5),
+                                        resultSet.getString(6)
                                 );
-                                items.add(product);
+                                mItems.add(product);
                             }
 
                             mRecyclerView.setAdapter(new ProductAdapter());
@@ -121,7 +123,7 @@ public class ProductActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull ProductHolder holder, int position) {
-            Product product = items.get(position);
+            Product product = mItems.get(position);
             holder.tvName.setText(product.getName());
             holder.tvPrice.setText(Utility.toPrice(product.getPrice()));
             holder.tvProductId.setText(product.getProductId());
@@ -135,7 +137,7 @@ public class ProductActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            return items.size();
+            return mItems.size();
         }
     }
 
@@ -160,7 +162,7 @@ public class ProductActivity extends AppCompatActivity {
             btEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Product product = items.get(getAdapterPosition());
+                    Product product = mItems.get(getAdapterPosition());
                     startActivity(new Intent(getBaseContext(), EditProductActivity.class)
                             .putExtra("product", product));
                 }
@@ -169,7 +171,7 @@ public class ProductActivity extends AppCompatActivity {
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    final Product product = items.get(getAdapterPosition());
+                    final Product product = mItems.get(getAdapterPosition());
                     AlertDialog.Builder builder = new AlertDialog.Builder(ProductActivity.this);
                     builder.setTitle("Delete")
                             .setMessage("Are you sure delete " + product.getName() + "?")

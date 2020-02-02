@@ -1,24 +1,27 @@
-package com.adedom.basicandroid;
+package com.adedom.basicandroid.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-class Product implements Parcelable {
+public class Product implements Parcelable {
+
     private String productId;
     private String name;
     private double price;
     private int qty;
     private String image;
+    private String productTypeId;
 
     public Product() {
     }
 
-    public Product(String productId, String name, double price, int qty, String image) {
+    public Product(String productId, String name, double price, int qty, String image, String productTypeId) {
         this.productId = productId;
         this.name = name;
         this.price = price;
         this.qty = qty;
         this.image = image;
+        this.productTypeId = productTypeId;
     }
 
     public String getProductId() {
@@ -61,6 +64,14 @@ class Product implements Parcelable {
         this.image = image;
     }
 
+    public String getProductTypeId() {
+        return productTypeId;
+    }
+
+    public void setProductTypeId(String productTypeId) {
+        this.productTypeId = productTypeId;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -73,6 +84,7 @@ class Product implements Parcelable {
         dest.writeDouble(this.price);
         dest.writeInt(this.qty);
         dest.writeString(this.image);
+        dest.writeString(this.productTypeId);
     }
 
     protected Product(Parcel in) {
@@ -81,6 +93,7 @@ class Product implements Parcelable {
         this.price = in.readDouble();
         this.qty = in.readInt();
         this.image = in.readString();
+        this.productTypeId = in.readString();
     }
 
     public static final Parcelable.Creator<Product> CREATOR = new Parcelable.Creator<Product>() {
