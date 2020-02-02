@@ -1,5 +1,6 @@
 package com.adedom.basicandroid;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,6 +24,7 @@ import com.adedom.basicandroid.models.ProductIn;
 import com.adedom.basicandroid.util.Utility;
 import com.adedom.library.Dru;
 import com.adedom.library.ExecuteQuery;
+import com.adedom.library.ExecuteUpdate;
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -161,6 +164,62 @@ public class ProductInActivity extends AppCompatActivity {
             tvProductInNo = (TextView) itemView.findViewById(R.id.tv_product_in_no);
             tvDateIn = (TextView) itemView.findViewById(R.id.tv_date_in);
             btEdit = (Button) itemView.findViewById(R.id.bt_edit);
+
+            btEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ProductIn productIn = mItems.get(getAdapterPosition());
+                    startActivity(new Intent(getBaseContext(), EditProductInActivity.class)
+                            .putExtra("product_in", productIn));
+                }
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    final ProductIn productIn = mItems.get(getAdapterPosition());
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ProductInActivity.this);
+                    builder.setTitle("Delete")
+                            .setMessage("Are you sure delete " + productIn.getName() + "?")
+                            .setPositiveButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            }).setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            deleteProductIn(productIn.getProductIdNo(), productIn.getProductId(), productIn.getQuantity());
+                        }
+                    }).show();
+                    return false;
+                }
+            });
+        }
+
+        private void deleteProductIn(String productIdNo, final String productId, final int quantity) {
+            String sql = "DELETE FROM productin WHERE ProductInNo = '" + productIdNo + "'";
+            Dru.connection(ConnectDB.getConnection())
+                    .execute(sql)
+                    .commit(new ExecuteUpdate() {
+                        @Override
+                        public void onComplete() {
+                            updateProduct(productId, quantity);
+                        }
+                    });
+        }
+
+        private void updateProduct(String productId, int quantity) {
+            String sql = "UPDATE product SET qty=qty-" + quantity + " WHERE product_id = '" + productId + "'";
+            Dru.connection(ConnectDB.getConnection())
+                    .execute(sql)
+                    .commit(new ExecuteUpdate() {
+                        @Override
+                        public void onComplete() {
+                            Toast.makeText(getBaseContext(), "Delete success", Toast.LENGTH_SHORT).show();
+                            onResume();
+                        }
+                    });
         }
     }
 }

@@ -2,8 +2,6 @@ package com.adedom.basicandroid;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.adedom.basicandroid.models.Product;
+import com.adedom.basicandroid.models.ProductIn;
 import com.adedom.library.Dru;
 import com.adedom.library.ExecuteQuery;
 import com.adedom.library.ExecuteUpdate;
@@ -28,8 +27,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class InsertProductInActivity extends AppCompatActivity {
+public class EditProductInActivity extends AppCompatActivity {
 
+    private ProductIn mProductIn;
     private EditText mEtProductInNo;
     private Spinner mSpinner;
     private EditText mEtQuantity;
@@ -42,7 +42,9 @@ public class InsertProductInActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_insert_product_in);
+        setContentView(R.layout.activity_edit_product_in);
+
+        mProductIn = getIntent().getParcelableExtra("product_in");
 
         mEtProductInNo = (EditText) findViewById(R.id.et_product_in_no);
         mSpinner = (Spinner) findViewById(R.id.spinner);
@@ -50,6 +52,10 @@ public class InsertProductInActivity extends AppCompatActivity {
         mEtPrice = (EditText) findViewById(R.id.et_price);
         mBtCancel = (Button) findViewById(R.id.bt_cancel);
         mBtOk = (Button) findViewById(R.id.bt_ok);
+
+        mEtProductInNo.setText(mProductIn.getProductIdNo());
+        mEtQuantity.setText(mProductIn.getQuantity() + "");
+        mEtPrice.setText(mProductIn.getPrice() + "");
 
         mBtCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,40 +67,7 @@ public class InsertProductInActivity extends AppCompatActivity {
         mBtOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                insertProductIn();
-            }
-        });
-
-        mEtProductInNo.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                String sql = "SELECT * FROM productin WHERE ProductInNo = '" + charSequence + "'";
-                Dru.connection(ConnectDB.getConnection())
-                        .execute(sql)
-                        .commit(new ExecuteQuery() {
-                            @Override
-                            public void onComplete(ResultSet resultSet) {
-                                try {
-                                    if (resultSet.next()) {
-                                        mBtOk.setEnabled(false);
-                                    } else {
-                                        mBtOk.setEnabled(true);
-                                    }
-                                } catch (SQLException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
+                updateProductIn();
             }
         });
     }
@@ -122,7 +95,13 @@ public class InsertProductInActivity extends AppCompatActivity {
                                 mItems.add(product);
                             }
                             mSpinner.setAdapter(new ProductAdapter(getBaseContext(), mItems));
-                            mSpinner.setSelection(0);
+
+                            for (int i = 0; i < mItems.size(); i++) {
+                                if (mProductIn.getProductId().equals(mItems.get(i).getProductId())) {
+                                    mSpinner.setSelection(i);
+                                }
+                            }
+
                         } catch (SQLException e) {
                             e.printStackTrace();
                         }
@@ -143,7 +122,7 @@ public class InsertProductInActivity extends AppCompatActivity {
         });
     }
 
-    private void insertProductIn() {
+    private void updateProductIn() {
         String productIdNo = mEtProductInNo.getText().toString().trim();
         final String quantity = mEtQuantity.getText().toString().trim();
         final String price = mEtPrice.getText().toString().trim();
@@ -152,28 +131,29 @@ public class InsertProductInActivity extends AppCompatActivity {
         else if (quantity.isEmpty()) return;
         else if (price.isEmpty()) return;
 
-        String sql = "INSERT INTO productin VALUES ('" + productIdNo + "','" + mProductId
-                + "',CURRENT_DATE()," + quantity + "," + price + ")";
+        String sql = "UPDATE productin SET ProductID='" + mProductId +
+                "',DateIn=CURRENT_DATE(),Quantity=" + quantity + ",Price=" + price +
+                " WHERE ProductInNo = '" + productIdNo + "'";
         Dru.connection(ConnectDB.getConnection())
                 .execute(sql)
                 .commit(new ExecuteUpdate() {
                     @Override
                     public void onComplete() {
-                        updateProduct(price, quantity);
+                        updateProduct(quantity, price);
                     }
                 });
     }
 
-    private void updateProduct(String price, String quantity) {
-        String sql = "UPDATE product SET price=" + price + ",qty=qty+" + quantity
-                + " WHERE product_id = '" + mProductId + "'";
+    private void updateProduct(String quantity, String price) {
+        int qty = mProductIn.getQuantity();
+        String sql = "UPDATE product SET price=" + price + ",qty=(qty-" + qty + ")+" + quantity + " WHERE product_id = '" + mProductId + "'";
         Dru.connection(ConnectDB.getConnection())
                 .execute(sql)
                 .commit(new ExecuteUpdate() {
                     @Override
                     public void onComplete() {
                         finish();
-                        Toast.makeText(getBaseContext(), "Insert success", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(), "Update success", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -211,5 +191,4 @@ public class InsertProductInActivity extends AppCompatActivity {
             return convertView;
         }
     }
-
 }

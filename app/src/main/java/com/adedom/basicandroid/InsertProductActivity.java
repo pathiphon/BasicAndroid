@@ -217,8 +217,8 @@ public class InsertProductActivity extends AppCompatActivity {
             Utility.uploadImage(image, mBitmap);
         }
 
-        String sql = "INSERT INTO product(product_id, name, price, qty, image, ProductTypeID) " +
-                "VALUES ('" + productId + "','" + name + "'," + price + "," + qty + ",'" + image + "','" + mProductTypeId + "')";
+        String sql = "INSERT INTO product VALUES ('" + productId + "','" + name + "',"
+                + price + "," + qty + ",'" + image + "','" + mProductTypeId + "')";
         Dru.connection(ConnectDB.getConnection())
                 .execute(sql)
                 .commit(new ExecuteUpdate() {
