@@ -3,8 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/report"
-        android:title="รายงาน"
+        android:id="@+id/report_by_id"
+        android:title="รายงานสินค้าตามรหัส"
+        app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/report_by_type"
+        android:title="รายงานสินค้าตามประเภท"
         app:showAsAction="collapseActionView" />
 
 </menu>

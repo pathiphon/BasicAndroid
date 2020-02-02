@@ -28,7 +28,7 @@ public class ProductDialog extends DialogFragment {
 
         View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_product, null);
 
-        Product product = getArguments().getParcelable("product");
+        final Product product = getArguments().getParcelable("product");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("สินค้า");
@@ -39,7 +39,6 @@ public class ProductDialog extends DialogFragment {
 
         mTvName.setText(product.getName());
         mTvPrice.setText(Utility.toPrice(product.getPrice()));
-
         Glide.with(this)
                 .load(ConnectDB.BASE_IMAGE + product.getImage())
                 .into(mIvImage);

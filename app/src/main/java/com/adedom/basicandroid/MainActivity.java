@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<Product> mItems;
     private RecyclerView mRecyclerView;
+    private Button mBtIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +49,16 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        mBtIn = (Button) findViewById(R.id.bt_in);
+
         mRecyclerView.setLayoutManager(new GridLayoutManager(getBaseContext(), 2));
+
+        mBtIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getBaseContext(), ProductInActivity.class));
+            }
+        });
 
     }
 

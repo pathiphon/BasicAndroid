@@ -103,8 +103,11 @@ public class ProductActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.report:
+            case R.id.report_by_id:
                 startActivity(new Intent(getBaseContext(), ReportProductActivity.class));
+                break;
+            case R.id.report_by_type:
+                Toast.makeText(getBaseContext(), "Learning together", Toast.LENGTH_LONG).show();
                 break;
             case android.R.id.home:
                 finish();

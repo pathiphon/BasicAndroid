@@ -28,4 +28,31 @@
         app:spanCount="2"
         tools:listitem="@layout/item_list_product" />
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="8dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_button"
+            android:drawableEnd="@drawable/ic_remove_black"
+            android:drawableRight="@drawable/ic_remove_black"
+            android:text="จ่ายสินค้าออก" />
+
+        <Button
+            android:id="@+id/bt_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/shape_button"
+            android:drawableStart="@drawable/ic_add_black"
+            android:drawableLeft="@drawable/ic_add_black"
+            android:text="รับสินค้าเข้า" />
+
+    </RelativeLayout>
+
 </RelativeLayout>
