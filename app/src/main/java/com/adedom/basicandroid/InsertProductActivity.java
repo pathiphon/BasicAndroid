@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -31,6 +32,8 @@ public class InsertProductActivity extends AppCompatActivity {
     private EditText mEtName;
     private EditText mEtPrice;
     private EditText mEtQty;
+    private Spinner mSpinner;
+    private ImageView mIvAdd;
     private ImageView mIvImage;
     private Button mBtOk;
     private Button mBtCancel;
@@ -45,9 +48,18 @@ public class InsertProductActivity extends AppCompatActivity {
         mEtName = (EditText) findViewById(R.id.et_name);
         mEtPrice = (EditText) findViewById(R.id.et_price);
         mEtQty = (EditText) findViewById(R.id.et_qty);
+        mSpinner = (Spinner) findViewById(R.id.spinner);
+        mIvAdd = (ImageView) findViewById(R.id.iv_add);
         mIvImage = (ImageView) findViewById(R.id.iv_image);
         mBtOk = (Button) findViewById(R.id.bt_ok);
         mBtCancel = (Button) findViewById(R.id.bt_cancel);
+
+        mIvAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getBaseContext(), AddTypeActivity.class));
+            }
+        });
 
         mIvImage.setOnClickListener(new View.OnClickListener() {
             @Override
