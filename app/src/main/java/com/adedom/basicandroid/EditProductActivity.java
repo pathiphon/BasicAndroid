@@ -179,14 +179,14 @@ public class EditProductActivity extends AppCompatActivity {
             return;
         }
 
-        String image = mProduct.getImage();
+        String imageName = mProduct.getImage();
         if (mBitmap != null) {
-            image = Dru.getImageNameJpg();
-            Dru.uploadImage(ConnectDB.BASE_IMAGE, image, mBitmap);
+            imageName = Dru.getImageNameJpg();
+            Dru.uploadImage(ConnectDB.BASE_IMAGE, imageName, mBitmap);
         }
 
         String sql = "UPDATE product SET name='" + name + "',price=" + price + ",qty=" + qty
-                + ",image='" + image + "',ProductTypeID='" + mProductTypeId
+                + ",image='" + imageName + "',ProductTypeID='" + mProductTypeId
                 + "' WHERE product_id = '" + productId + "'";
         Dru.connection(ConnectDB.getConnection())
                 .execute(sql)

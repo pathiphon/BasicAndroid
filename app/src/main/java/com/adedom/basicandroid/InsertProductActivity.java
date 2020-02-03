@@ -210,14 +210,14 @@ public class InsertProductActivity extends AppCompatActivity {
             return;
         }
 
-        String image = "empty";
+        String imageName = "empty";
         if (mBitmap != null) {
-            image = Dru.getImageNameJpg();
-            Dru.uploadImage(ConnectDB.BASE_IMAGE, image, mBitmap);
+            imageName = Dru.getImageNameJpg();
+            Dru.uploadImage(ConnectDB.BASE_IMAGE, imageName, mBitmap);
         }
 
         String sql = "INSERT INTO product VALUES ('" + productId + "','" + name + "',"
-                + price + "," + qty + ",'" + image + "','" + mProductTypeId + "')";
+                + price + "," + qty + ",'" + imageName + "','" + mProductTypeId + "')";
         Dru.connection(ConnectDB.getConnection())
                 .execute(sql)
                 .commit(new ExecuteUpdate() {
