@@ -9,13 +9,13 @@ public class ProductIn implements Parcelable {
     private String productIdNo;
     private String productId;
     private String dateIn;
-    private int quantity;
-    private double price;
+    private String quantity;
+    private String price;
 
     public ProductIn() {
     }
 
-    public ProductIn(String name, String image, String productIdNo, String productId, String dateIn, int quantity, double price) {
+    public ProductIn(String name, String image, String productIdNo, String productId, String dateIn, String quantity, String price) {
         this.name = name;
         this.image = image;
         this.productIdNo = productIdNo;
@@ -65,19 +65,19 @@ public class ProductIn implements Parcelable {
         this.dateIn = dateIn;
     }
 
-    public int getQuantity() {
+    public String getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
 
-    public double getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
@@ -93,8 +93,8 @@ public class ProductIn implements Parcelable {
         dest.writeString(this.productIdNo);
         dest.writeString(this.productId);
         dest.writeString(this.dateIn);
-        dest.writeInt(this.quantity);
-        dest.writeDouble(this.price);
+        dest.writeString(this.quantity);
+        dest.writeString(this.price);
     }
 
     protected ProductIn(Parcel in) {
@@ -103,8 +103,8 @@ public class ProductIn implements Parcelable {
         this.productIdNo = in.readString();
         this.productId = in.readString();
         this.dateIn = in.readString();
-        this.quantity = in.readInt();
-        this.price = in.readDouble();
+        this.quantity = in.readString();
+        this.price = in.readString();
     }
 
     public static final Parcelable.Creator<ProductIn> CREATOR = new Parcelable.Creator<ProductIn>() {

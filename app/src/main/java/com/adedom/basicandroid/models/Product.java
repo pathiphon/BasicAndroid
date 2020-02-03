@@ -7,15 +7,15 @@ public class Product implements Parcelable {
 
     private String productId;
     private String name;
-    private double price;
-    private int qty;
+    private String price;
+    private String qty;
     private String image;
     private String productTypeId;
 
     public Product() {
     }
 
-    public Product(String productId, String name, double price, int qty, String image, String productTypeId) {
+    public Product(String productId, String name, String price, String qty, String image, String productTypeId) {
         this.productId = productId;
         this.name = name;
         this.price = price;
@@ -40,19 +40,19 @@ public class Product implements Parcelable {
         this.name = name;
     }
 
-    public double getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
-    public int getQty() {
+    public String getQty() {
         return qty;
     }
 
-    public void setQty(int qty) {
+    public void setQty(String qty) {
         this.qty = qty;
     }
 
@@ -81,8 +81,8 @@ public class Product implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.productId);
         dest.writeString(this.name);
-        dest.writeDouble(this.price);
-        dest.writeInt(this.qty);
+        dest.writeString(this.price);
+        dest.writeString(this.qty);
         dest.writeString(this.image);
         dest.writeString(this.productTypeId);
     }
@@ -90,8 +90,8 @@ public class Product implements Parcelable {
     protected Product(Parcel in) {
         this.productId = in.readString();
         this.name = in.readString();
-        this.price = in.readDouble();
-        this.qty = in.readInt();
+        this.price = in.readString();
+        this.qty = in.readString();
         this.image = in.readString();
         this.productTypeId = in.readString();
     }
