@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // TODO: 04/02/2563 5 test connect db
         if (ConnectDB.getConnection() == null) {
             Dru.failed(getBaseContext());
         } else {

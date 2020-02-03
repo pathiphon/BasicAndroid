@@ -18,6 +18,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+//        todo 1 connect db
         maven { url 'https://jitpack.io' }
     }
 }

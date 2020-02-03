@@ -4,6 +4,7 @@ import com.adedom.library.Dru;
 
 import java.sql.Connection;
 
+// TODO: 04/02/2563 4 connect db
 public class ConnectDB {
 
     public static String BASE_URL = "192.168.43.22";

@@ -28,9 +28,11 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+//    todo 6 implementation android library
     // widgets
     implementation 'com.google.android.material:material:1.2.0-alpha04'
 
+//    todo 2 connect db
     // library
     implementation 'com.github.pathiphon:MySqlConnectorJava:0.6.7'
 
