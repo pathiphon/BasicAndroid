@@ -25,7 +25,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.adedom.basicandroid.models.ProductType;
-import com.adedom.basicandroid.util.Utility;
 import com.adedom.library.Dru;
 import com.adedom.library.ExecuteQuery;
 import com.adedom.library.ExecuteUpdate;
@@ -75,7 +74,7 @@ public class InsertProductActivity extends AppCompatActivity {
         mIvImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Utility.selectImage(InsertProductActivity.this, 1234);
+                Dru.selectImage(InsertProductActivity.this, 1234);
             }
         });
 
@@ -213,8 +212,8 @@ public class InsertProductActivity extends AppCompatActivity {
 
         String image = "empty";
         if (mBitmap != null) {
-            image = Utility.getImageName();
-            Utility.uploadImage(image, mBitmap);
+            image = Dru.getImageNameJpg();
+            Dru.uploadImage(ConnectDB.BASE_IMAGE, image, mBitmap);
         }
 
         String sql = "INSERT INTO product VALUES ('" + productId + "','" + name + "',"

@@ -15,10 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.adedom.basicandroid.models.Product;
-import com.adedom.basicandroid.util.Utility;
 import com.adedom.library.Dru;
 import com.adedom.library.ExecuteQuery;
-import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.sql.ResultSet;
@@ -62,9 +60,11 @@ public class ReportProductActivity extends AppCompatActivity implements OnAttach
     }
 
     private void fetchProduct(String productIdStart, String productIdEnd) {
-        String sql = "SELECT * FROM product";
+        String sql = "SELECT product_id, name, FORMAT(price,2) price, FORMAT(qty,0) qty, image, ProductTypeID " +
+                "FROM product";
         if (!productIdStart.equals("") && !productIdEnd.equals("")) {
-            sql = "SELECT * FROM product WHERE product_id BETWEEN '" + productIdStart + "' AND '" + productIdEnd + "'";
+            sql = "SELECT product_id, name, FORMAT(price,2) price, FORMAT(qty,0) qty, image, ProductTypeID " +
+                    "FROM product WHERE product_id BETWEEN '" + productIdStart + "' AND '" + productIdEnd + "'";
         }
         Dru.connection(ConnectDB.getConnection())
                 .execute(sql)
@@ -77,8 +77,8 @@ public class ReportProductActivity extends AppCompatActivity implements OnAttach
                                 Product product = new Product(
                                         resultSet.getString("product_id"),
                                         resultSet.getString("name"),
-                                        resultSet.getInt("price"),
-                                        resultSet.getInt("qty"),
+                                        resultSet.getString("price"),
+                                        resultSet.getString("qty"),
                                         resultSet.getString("image"),
                                         resultSet.getString("ProductTypeID")
                                 );
@@ -118,14 +118,10 @@ public class ReportProductActivity extends AppCompatActivity implements OnAttach
         public void onBindViewHolder(@NonNull ReportHolder holder, int position) {
             Product product = mItems.get(position);
             holder.tvName.setText(product.getName());
-            holder.tvPrice.setText(Utility.toPrice(product.getPrice()));
+            holder.tvPrice.setText(product.getPrice() + " บาท");
             holder.tvProductId.setText(product.getProductId());
-            holder.tvQty.setText(Utility.toQty(product.getQty()));
-
-            Glide.with(getBaseContext())
-                    .load(ConnectDB.BASE_IMAGE + product.getImage())
-                    .circleCrop()
-                    .into(holder.ivImage);
+            holder.tvQty.setText(product.getQty() + " หน่วย");
+            Dru.loadImageCircle(holder.ivImage, ConnectDB.BASE_IMAGE + product.getImage());
         }
 
         @Override

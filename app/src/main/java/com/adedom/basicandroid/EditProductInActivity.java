@@ -54,8 +54,8 @@ public class EditProductInActivity extends AppCompatActivity {
         mBtOk = (Button) findViewById(R.id.bt_ok);
 
         mEtProductInNo.setText(mProductIn.getProductIdNo());
-        mEtQuantity.setText(mProductIn.getQuantity() + "");
-        mEtPrice.setText(mProductIn.getPrice() + "");
+        mEtQuantity.setText(mProductIn.getQuantity().replace(",", ""));
+        mEtPrice.setText(mProductIn.getPrice().replace(",", ""));
 
         mBtCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,7 +145,7 @@ public class EditProductInActivity extends AppCompatActivity {
     }
 
     private void updateProduct(String quantity, String price) {
-        int qty = mProductIn.getQuantity();
+        String qty = mProductIn.getQuantity();
         String sql = "UPDATE product SET price=" + price + ",qty=(qty-" + qty + ")+" + quantity + " WHERE product_id = '" + mProductId + "'";
         Dru.connection(ConnectDB.getConnection())
                 .execute(sql)

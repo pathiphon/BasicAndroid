@@ -21,11 +21,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.adedom.basicandroid.models.Product;
-import com.adedom.basicandroid.util.Utility;
 import com.adedom.library.Dru;
 import com.adedom.library.ExecuteQuery;
 import com.adedom.library.ExecuteUpdate;
-import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.sql.ResultSet;
@@ -66,7 +64,7 @@ public class ProductActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        String sql = "SELECT * FROM product";
+        String sql = "SELECT product_id, name, FORMAT(price,2) price, FORMAT(qty,0) qty, image, ProductTypeID FROM product";
         Dru.connection(ConnectDB.getConnection())
                 .execute(sql)
                 .commit(new ExecuteQuery() {
@@ -78,8 +76,8 @@ public class ProductActivity extends AppCompatActivity {
                                 Product product = new Product(
                                         resultSet.getString(1),
                                         resultSet.getString(2),
-                                        resultSet.getInt(3),
-                                        resultSet.getInt(4),
+                                        resultSet.getString(3),
+                                        resultSet.getString(4),
                                         resultSet.getString(5),
                                         resultSet.getString(6)
                                 );
@@ -128,14 +126,11 @@ public class ProductActivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull ProductHolder holder, int position) {
             Product product = mItems.get(position);
             holder.tvName.setText(product.getName());
-            holder.tvPrice.setText(Utility.toPrice(product.getPrice()));
+            holder.tvPrice.setText(product.getPrice() + " บาท");
             holder.tvProductId.setText(product.getProductId());
-            holder.tvQty.setText(Utility.toQty(product.getQty()));
+            holder.tvQty.setText(product.getQty() + " หน่วย");
 
-            Glide.with(getBaseContext())
-                    .load(ConnectDB.BASE_IMAGE + product.getImage())
-                    .circleCrop()
-                    .into(holder.ivImage);
+            Dru.loadImageCircle(holder.ivImage, ConnectDB.BASE_IMAGE + product.getImage());
         }
 
         @Override

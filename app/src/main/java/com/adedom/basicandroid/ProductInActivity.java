@@ -21,11 +21,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.adedom.basicandroid.models.ProductIn;
-import com.adedom.basicandroid.util.Utility;
 import com.adedom.library.Dru;
 import com.adedom.library.ExecuteQuery;
 import com.adedom.library.ExecuteUpdate;
-import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.sql.ResultSet;
@@ -66,7 +64,8 @@ public class ProductInActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        String sql = "SELECT p.name, image, pi.* FROM productin AS pi INNER JOIN product AS p ON pi.ProductID = p.product_id";
+        String sql = "SELECT p.name, p.image, pi.ProductInNo, pi.ProductID, pi.DateIn, FORMAT(pi.Quantity,0) Quantity, FORMAT(pi.Price,2) Price \n" +
+                "FROM productin AS pi INNER JOIN product AS p ON pi.ProductID = p.product_id";
         Dru.connection(ConnectDB.getConnection())
                 .execute(sql)
                 .commit(new ExecuteQuery() {
@@ -81,8 +80,8 @@ public class ProductInActivity extends AppCompatActivity {
                                         resultSet.getString(3),
                                         resultSet.getString(4),
                                         resultSet.getString(5),
-                                        resultSet.getInt(6),
-                                        resultSet.getDouble(7)
+                                        resultSet.getString(6),
+                                        resultSet.getString(7)
                                 );
                                 mItems.add(in);
                             }
@@ -125,16 +124,12 @@ public class ProductInActivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull ProductInHolder holder, int position) {
             ProductIn in = mItems.get(position);
             holder.tvName.setText(in.getName());
-            holder.tvPrice.setText(Utility.toPrice(in.getPrice()));
+            holder.tvPrice.setText(in.getPrice() + " บาท");
             holder.tvProductId.setText(in.getProductId());
-            holder.tvQty.setText(Utility.toQty(in.getQuantity()));
+            holder.tvQty.setText(in.getQuantity() + " หน่วย");
             holder.tvProductInNo.setText(in.getProductIdNo());
             holder.tvDateIn.setText(in.getDateIn());
-
-            Glide.with(getBaseContext())
-                    .load(ConnectDB.BASE_IMAGE + in.getImage())
-                    .circleCrop()
-                    .into(holder.ivImage);
+            Dru.loadImageCircle(holder.ivImage, ConnectDB.BASE_IMAGE + in.getImage());
         }
 
         @Override
@@ -197,7 +192,7 @@ public class ProductInActivity extends AppCompatActivity {
             });
         }
 
-        private void deleteProductIn(String productIdNo, final String productId, final int quantity) {
+        private void deleteProductIn(String productIdNo, final String productId, final String quantity) {
             String sql = "DELETE FROM productin WHERE ProductInNo = '" + productIdNo + "'";
             Dru.connection(ConnectDB.getConnection())
                     .execute(sql)
@@ -209,7 +204,7 @@ public class ProductInActivity extends AppCompatActivity {
                     });
         }
 
-        private void updateProduct(String productId, int quantity) {
+        private void updateProduct(String productId, String quantity) {
             String sql = "UPDATE product SET qty=qty-" + quantity + " WHERE product_id = '" + productId + "'";
             Dru.connection(ConnectDB.getConnection())
                     .execute(sql)

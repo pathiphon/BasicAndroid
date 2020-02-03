@@ -12,14 +12,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import com.adedom.basicandroid.models.Product;
-import com.adedom.basicandroid.util.Utility;
-import com.bumptech.glide.Glide;
+import com.adedom.library.Dru;
 
 public class ProductDialog extends DialogFragment {
 
     private ImageView mIvImage;
     private TextView mTvName;
     private TextView mTvPrice;
+    private TextView mTvQty;
 
     @NonNull
     @Override
@@ -36,12 +36,12 @@ public class ProductDialog extends DialogFragment {
         mIvImage = (ImageView) view.findViewById(R.id.iv_image);
         mTvName = (TextView) view.findViewById(R.id.tv_name);
         mTvPrice = (TextView) view.findViewById(R.id.tv_price);
+        mTvQty = (TextView) view.findViewById(R.id.tv_qty);
 
         mTvName.setText(product.getName());
-        mTvPrice.setText(Utility.toPrice(product.getPrice()));
-        Glide.with(this)
-                .load(ConnectDB.BASE_IMAGE + product.getImage())
-                .into(mIvImage);
+        mTvPrice.setText(product.getPrice() + " บาท");
+        mTvQty.setText(product.getQty() + " หน่วย");
+        Dru.loadImage(mIvImage, ConnectDB.BASE_IMAGE + product.getImage());
 
         return builder.setView(view).create();
     }

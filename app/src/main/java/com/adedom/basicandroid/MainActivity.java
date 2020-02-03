@@ -18,10 +18,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.adedom.basicandroid.models.Product;
-import com.adedom.basicandroid.util.Utility;
 import com.adedom.library.Dru;
 import com.adedom.library.ExecuteQuery;
-import com.bumptech.glide.Glide;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -66,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        String sql = "SELECT * FROM product";
+        String sql = "SELECT product_id, name, FORMAT(price,2) price, FORMAT(qty,0) qty, image, ProductTypeID FROM product";
         Dru.connection(ConnectDB.getConnection())
                 .execute(sql)
                 .commit(new ExecuteQuery() {
@@ -78,8 +76,8 @@ public class MainActivity extends AppCompatActivity {
                                 Product product = new Product(
                                         resultSet.getString("product_id"),
                                         resultSet.getString("name"),
-                                        resultSet.getInt("price"),
-                                        resultSet.getInt("qty"),
+                                        resultSet.getString("price"),
+                                        resultSet.getString("qty"),
                                         resultSet.getString("image"),
                                         resultSet.getString("ProductTypeID")
                                 );
@@ -120,12 +118,10 @@ public class MainActivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull MainHolder holder, int position) {
             Product product = mItems.get(position);
             holder.tvName.setText(product.getName());
-            holder.tvPrice.setText(Utility.toPrice(product.getPrice()));
+            holder.tvPrice.setText(product.getPrice() + " บาท");
+            holder.tvQty.setText(product.getQty() + " หน่วย");
 
-            Glide.with(getBaseContext())
-                    .load(ConnectDB.BASE_IMAGE + product.getImage())
-                    .circleCrop()
-                    .into(holder.ivImage);
+            Dru.loadImageCircle(holder.ivImage, ConnectDB.BASE_IMAGE + product.getImage());
         }
 
         @Override
@@ -138,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
         final ImageView ivImage;
         final TextView tvName;
         final TextView tvPrice;
+        final TextView tvQty;
 
         public MainHolder(@NonNull View itemView) {
             super(itemView);
@@ -145,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
             ivImage = (ImageView) itemView.findViewById(R.id.iv_image);
             tvName = (TextView) itemView.findViewById(R.id.tv_name);
             tvPrice = (TextView) itemView.findViewById(R.id.tv_price);
+            tvQty = (TextView) itemView.findViewById(R.id.tv_qty);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

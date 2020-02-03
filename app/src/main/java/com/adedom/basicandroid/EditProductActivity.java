@@ -24,11 +24,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.adedom.basicandroid.models.Product;
 import com.adedom.basicandroid.models.ProductType;
-import com.adedom.basicandroid.util.Utility;
 import com.adedom.library.Dru;
 import com.adedom.library.ExecuteQuery;
 import com.adedom.library.ExecuteUpdate;
-import com.bumptech.glide.Glide;
 
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -70,16 +68,14 @@ public class EditProductActivity extends AppCompatActivity {
 
         mEtProductId.setText(mProduct.getProductId());
         mEtName.setText(mProduct.getName());
-        mEtPrice.setText(mProduct.getPrice() + "");
-        mEtQty.setText(mProduct.getQty() + "");
-        Glide.with(getBaseContext())
-                .load(ConnectDB.BASE_IMAGE + mProduct.getImage())
-                .into(mIvImage);
+        mEtPrice.setText(mProduct.getPrice().replace(",", ""));
+        mEtQty.setText(mProduct.getQty().replace(",", ""));
+        Dru.loadImage(mIvImage, ConnectDB.BASE_IMAGE + mProduct.getImage());
 
         mIvImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Utility.selectImage(EditProductActivity.this, 2345);
+                Dru.selectImage(EditProductActivity.this, 2345);
             }
         });
 
@@ -185,8 +181,8 @@ public class EditProductActivity extends AppCompatActivity {
 
         String image = mProduct.getImage();
         if (mBitmap != null) {
-            image = Utility.getImageName();
-            Utility.uploadImage(image, mBitmap);
+            image = Dru.getImageNameJpg();
+            Dru.uploadImage(ConnectDB.BASE_IMAGE, image, mBitmap);
         }
 
         String sql = "UPDATE product SET name='" + name + "',price=" + price + ",qty=" + qty
