@@ -100,8 +100,7 @@ public class InsertProductActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                String productId = mEtProductId.getText().toString().trim();
-                String sql = "SELECT * FROM product WHERE product_id = '" + productId + "'";
+                String sql = "SELECT * FROM product WHERE product_id = '" + charSequence + "'";
                 Dru.connection(ConnectDB.getConnection())
                         .execute(sql)
                         .commit(new ExecuteQuery() {
